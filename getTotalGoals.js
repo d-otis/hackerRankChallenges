@@ -10,46 +10,33 @@
 const axios = require('axios')
 
 async function getTotalGoals(team, year) {
-  // Barcelona & 2011
-  const url1 = `https://jsonmock.hackerrank.com/api/football_matches?team1=${team}&year=${year}`
-  const url2 = `https://jsonmock.hackerrank.com/api/football_matches?team2=${team}&year=${year}`
+  const baseURL = "https://jsonmock.hackerrank.com/api/football_matches?"
 
-  let homeGoals = []
-  let awayGoals = []
+  const homeGoals = await getGoals(team, year, "home")
+  const awayGoals = await getGoals(team, year, "away")
 
-  let hasNextPage1 = true
-  let hasNextPage2 = true
-  let currentPage1 = 1
-  let currentPage2 = 1
-  let hasError = false
+  async function getGoals(team, year, teamRole) {
+    let hasNextPage = true
+    let hasErrors = false
+    let goals = []
+    let currentPage = 1
+    const teamKey = teamRole === "home" ? "team1" : "team2"
 
-  while (hasNextPage1) {
-    const res1 = await axios.get(`${url1}&page=${currentPage1}`)
-    if (res1.data.total_pages === 0) { hasError = true }
-    if (!hasError && currentPage1 <= res1.data.total_pages) {
-      homeGoals = [...homeGoals, ...res1.data.data.map(match => parseInt(match.team1goals)) ]
-      currentPage1++
-    } else {
-      hasNextPage1 = false
+    while (hasNextPage) {
+      const response = await axios.get(`${baseURL}${teamKey}=${team}&page=${currentPage}&year=${year}`)
+
+      // console.log(response)
+      if (!hasErrors && currentPage <=response.data.total_pages ) {
+        goals = [ ...goals, ...response.data.data.map(game => parseInt(game[`${teamKey}goals`])) ]
+        currentPage++
+      } else {
+        hasNextPage = false
+      }
     }
+    return goals.reduce((acc, current) => acc + current, 0)
   }
-
-  while (hasNextPage2) {
-    const res2 = await axios.get(`${url2}&page=${currentPage2}`)
-    if (res2.data.total_pages === 0) { hasError = true }
-    if (!hasError && currentPage2 <= res2.data.total_pages) {
-      awayGoals = [...awayGoals, ...res2.data.data.map(match => parseInt(match.team2goals)) ]
-      currentPage2++
-    } else {
-      hasNextPage2 = false
-    }
-  }
-
-  let totalHomeGoals = homeGoals.reduce((acc, current) => acc + current, 0)
-  let totalAwayGoals = awayGoals.reduce((acc, current) => acc + current, 0)
-
-  if (hasError) return 0
-  return totalHomeGoals + totalAwayGoals
+  return homeGoals + awayGoals
 }
 
-console.log(getTotalGoals("Non Existing Clug", 2014))
+
+getTotalGoals("Barcelona", 2014).then(res => console.log(res))
