@@ -41,4 +41,4 @@ async function getTotalGoals(team, year) {
 }
 
 
-getTotalGoals("Barcelona", 2014).then(res => console.log(res))
+getTotalGoals("Error", 2014).then(res => console.log(res))
