@@ -25,8 +25,10 @@ async function getTotalGoals(team, year) {
     while (hasNextPage) {
       const response = await axios.get(`${baseURL}${teamKey}=${team}&page=${currentPage}&year=${year}`)
 
-      // console.log(response)
-      if (!hasErrors && currentPage <=response.data.total_pages ) {
+      if (response.data.total_pages === 0) {
+        hasErrors = true
+        hasNextPage = false
+      } else if (!hasErrors && currentPage <=response.data.total_pages ) {
         goals = [ ...goals, ...response.data.data.map(game => parseInt(game[`${teamKey}goals`])) ]
         currentPage++
       } else {
