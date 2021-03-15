@@ -1,4 +1,7 @@
-"In this challenge, the REST API contains information about football matches. The provided API allows querying matches by teams and year. The task is to get the number of matches for a given year that ended in a draw. A match is drawn when both teams scored the same number of goals.
+"In this challenge, the REST API contains information about football matches. 
+The provided API allows querying matches by teams and year. 
+The task is to get the number of matches for a given year that ended in a draw. 
+A match is drawn when both teams scored the same number of goals.
 
  
 
@@ -6,7 +9,8 @@ To access a collection of matches played in a given year, perform an HTTP GET re
 
 https://jsonmock.hackerrank.com/api/football_matches?year=<year>&page=<page>
 
-where <year> is the year of the competition and <page> is the page of the results to request. The results might be divided into several pages. Pages are numbered from 1.
+where <year> is the year of the competition and <page> is the page of the results to request. 
+The results might be divided into several pages. Pages are numbered from 1.
 
  
 
@@ -50,7 +54,11 @@ team2goals: a string denoting the number of goals scored by team2 in the match
 
  
 
-Notice that the number of pages might be in hundreds, and it would take too much time to fetch the results from all of them and examine the scores of every match. In order to overcome this issue, you are allowed to add an exact value of any of the match object fields to the URL query string in order to limit the number of results. This capability, if used correctly, can help you avoid examining individual match objects.
+Notice that the number of pages might be in hundreds, and it would take too much time to 
+fetch the results from all of them and examine the scores of every match. 
+In order to overcome this issue, you are allowed to add an exact value of any of the 
+match object fields to the URL query string in order to limit the number of results. 
+This capability, if used correctly, can help you avoid examining individual match objects.
 
  
 
